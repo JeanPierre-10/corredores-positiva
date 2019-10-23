@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="aspnet:UseTaskFriendlySynchronizationContext" value="true"/>
+    <!--Mensaje de Errores-->
+    <add key="E001" value="No se pudo establecer la conexión"/>
+    <add key="E002" value="El dato {0} no tiene el formato correcto"/>
+    <add key="E003" value="El dato {0} no tiene el formato de fecha correcto"/>
+    <add key="E004" value="Error Genérico de Base de Datos : {0} "/>
+    <add key="E005" value="La base de datos ha retornado valores nulos"/>
+    <add key="E006" value="El valor del campo {0} es obligatorio"/>
+    <add key="E007" value="El valor del campo {0} no tiene la longitud correcta"/>
+    <add key="E008" value="El ramo {0} no está autorizado para este servicio"/>
+    <add key="E009" value="La cadena JSON del request llega con valores nulos"/>
+    <add key="E010" value="Error Genérico del Servicio : "/>
+    <add key="E011" value="Error al momento de mapear datos : {0} "/>
+    <add key="E012" value="El producto {0} no puede ser procesado"/>
+    <add key="E013" value="El Rango de Fechas no es Permitido"/>
+    <!--Valores de configuracion-->
+    <add key="MAX_DIGITOS_CARNETEXT" value="12"/>
+    <add key="MAX_DIGITOS_DNI" value="8"/>
+    <add key="MAX_DIGITOS_PASAPORTE" value="11"/>
+    <add key="MAX_DIGITOS_CODIGO_CLIENTE" value="14"/>
+    <add key="MENSAJE_RESULTADO_ERROR" value="Hubieron errores en la consulta"/>
+    <add key="MENSAJE_OBTENER_PREGUNTAS" value="Preguntas de identidad obtenidas"/>
+    <add key="NOMBRE_CARPETA_LOG" value="Logs"/>
+    <add key="DEBUG" value="true"/>
+  </appSettings>
+</configuration>

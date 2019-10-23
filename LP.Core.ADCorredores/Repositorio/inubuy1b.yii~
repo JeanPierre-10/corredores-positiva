@@ -1,0 +1,75 @@
+﻿using LP.Core.ADCorredores.Comunes.Util;
+using LP.Core.ADCorredores.Entity;
+using LP.Core.ADCorredores.EntityRequest;
+using LP.Core.ADCorredores.Util;
+using Oracle.ManagedDataAccess.Client; 
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LP.Core.ADCorredores.Repositorio
+{
+    public class ProxyProduccionDetalle
+    {
+        #region Singleton
+        private static readonly ProxyProduccionDetalle _instance = new ProxyProduccionDetalle();
+
+        public static ProxyProduccionDetalle Instance
+        {
+            get { return ProxyProduccionDetalle._instance; }
+        }
+        #endregion Singleton
+        public List<BEDataCoasegPorPeriodo> GetProduccionDetalle(int CodigoCompania, string CodigoRamo, int CodigoRegion, int CodigoBroker, String busquedaFiltro)
+        {
+            List<BEDataCoasegPorPeriodo> listProductionBE = null;
+            try
+            {
+                using (OracleConnection cn = ConexionOracle.Instancia.Conectar)
+                {
+                    using (OracleCommand cmd = new OracleCommand { Connection = cn })
+                    {
+                        cmd.CommandText = "INSUDB.CORREDORES_PKG_PRODUCCION.CORREDORES_BALANCE_PRD_DETALLE";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("PCOMPANIA", OracleDbType.Varchar2).Value = CodigoCompania;
+                        cmd.Parameters.Add("PRAMO", OracleDbType.Varchar2).Value = CodigoRamo;
+                        cmd.Parameters.Add("PBROKER", OracleDbType.Varchar2).Value = CodigoBroker;
+                        cmd.Parameters.Add("PREGION", OracleDbType.Varchar2).Value = CodigoRegion;
+                        cmd.Parameters.Add("PCASEBUSQUEDA", OracleDbType.Varchar2).Value = busquedaFiltro;
+                        cmd.Parameters.Add(new OracleParameter("POCURSOR", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+                        cn.Open();
+                        OracleDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            listProductionBE = new List<BEDataCoasegPorPeriodo>();
+                        }
+                        while (dr.Read())
+                        {
+                            var productionBE = new BEDataCoasegPorPeriodo()
+                            {
+                                Anio = dr["ANIO"].ToString(),
+                                MesCodigo = dr["MES_CODIGO"].ToString(),
+                                MontoUSD = dr["MONTO_USD"].ToString(),
+                                MontoPEN = dr["MONTO_PEN"].ToString(),
+                                NombreMes = dr["MES"].ToString(),
+                            };
+                            listProductionBE.Add(productionBE);
+                        }
+                        dr.NextResult();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(Log.TipoLog.Error, System.Reflection.MethodBase.GetCurrentMethod().Name, string.Empty, "", ex.Message);
+                throw ex;
+            }
+            return listProductionBE;
+        }
+
+
+    }
+}
